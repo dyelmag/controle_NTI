@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt">
+{% load static %}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" id="bootstrap-css" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+    <title>Projeto</title>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Bootstrap core CSS -->
+
+    <!-- Custom fonts for this template -->
+
+    <!-- Custom styles for this template -->
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    <script>
+        window.location = "/";
+    </script>
+    {% else %}
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="{% static 'img/img-login.png' %}" id="icon" alt="User Icon" />
+            </div>
+
+            <!-- Login Form -->
+            <form action="{% url 'user:login' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        {% if invalid %}
+                        <div class="alert alert-danger" role="alert">
+                            Conta desativada
+                        </div>
+                        {% endif %}
+                        <!-- Login Form -->
+                        {% if invalid1 %}
+                        <div class="alert alert-danger" role="alert">
+                            Usuario ou Senha incorreto.
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuário" />
+                <input type="password" id="password" class="fadeIn third" name="login" placeholder="Senha" />
+                <input type="submit" class="fadeIn fourth" value="Entrar" />
+            </form>
+
+            <!-- Remind Passowrd 
+        <div id="formFooter">
+          <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>-->
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>

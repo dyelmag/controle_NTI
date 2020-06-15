@@ -1,0 +1,180 @@
+{% extends 'inicio.html' %}
+{% block content %}
+{% load static %}
+{% csrf_token %}
+<div class="wrapper">
+    <form id="regForm" action="">
+        {% csrf_token %}
+        <h1>Cadastrar novo equipamento:</h1>
+
+        <!-- One "tab" for each step in the form: -->
+        <div class="tab">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <select class="form-control" id="marca" onchange="marcaChange(event)">
+                            <option value="0">-------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="align-self-end btn btn-primary" data-toggle="modal"
+                        data-target="#modalMarca" style="width: 100%; margin-top: 30px;">
+                        Adicionar
+                    </button>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <select class="form-control" id="modelo" disabled onchange="selectModelo()">
+                            <option value="0">-------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="align-self-end btn btn-primary" id="bt_addModelo" data-toggle="modal"
+                        data-target="#modalModelo" style="width: 100%; margin-top: 30px;" disabled>
+                        Adicionar
+                    </button>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+        <div class="tab">Contact Info:
+            <p><input placeholder="E-mail..." oninput="this.className = ''"></p>
+            <p><input placeholder="Phone..." oninput="this.className = ''"></p>
+        </div>
+
+        <div class="tab">Birthday:
+            <p><input placeholder="dd" oninput="this.className = ''"></p>
+            <p><input placeholder="mm" oninput="this.className = ''"></p>
+            <p><input placeholder="yyyy" oninput="this.className = ''"></p>
+        </div>
+
+        <div class="tab">Login Info:
+            <p><input placeholder="Username..." oninput="this.className = ''"></p>
+            <p><input placeholder="Password..." oninput="this.className = ''"></p>
+        </div>
+
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <button type="button" id="prevBtn" class="align-self-end btn btn-primary"
+                    onclick="nextPrev(-1)">Anterior</button>
+                <button type="button" id="nextBtn" class="align-self-end btn btn-primary" onclick="nextPrev(1)"
+                    disabled>Proximo</button>
+            </div>
+        </div>
+
+        <!-- Circles which indicates the steps of the form: -->
+        <div style="text-align:center;margin-top:40px;">
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+        </div>
+
+    </form>
+</div>
+
+<!-- Modal Adicionar Marca-->
+<div class="modal fade" id="modalMarca" tabindex="-1" role="dialog" aria-labelledby="modalMarcaLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMarcaLabel">Cadastrar Marca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" class="form-control" id="nomeMarca" placeholder="Nome da marca">
+                    <small id="marcaErro" class="form-text text-muted" hidden>
+                        <p style="color: red;">* Marca ja está
+                            cadastrada</p>
+                    </small>
+                    <small id="marcaErro2" class="form-text text-muted" hidden>
+                        <p style="color: red;">* Campo
+                            obrigatório</p>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="obs">Observação:</label>
+                    <textarea class="form-control" name="obs" id="obsMarca" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="cadastraMarca()">Savar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Adicionar Modelo-->
+<div class="modal fade" id="modalModelo" tabindex="-1" role="dialog" aria-labelledby="modalModeloLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo_modelo">Cadastrar Modelo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nomeModelo">Nome:</label>
+                    <input type="text" class="form-control" id="nomeModelo" placeholder="Nome do modelo">
+                    <small id="modeloErro" class="form-text text-muted" hidden>
+                        <p style="color: red;">* Modelo ja está
+                            cadastrada</p>
+                    </small>
+                    <small id="modeloErro2" class="form-text text-muted" hidden>
+                        <p style="color: red;">* Campo
+                            obrigatório</p>
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Tipo:</label>
+                    <select class="form-control" id="tipo">
+                        <option value="Gabinete">Gabinete</option>
+                        <option value="Impressora">Impressora</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Mouse">Mouse</option>
+                        <option value="Notebook">Notebook</option>
+                        <option value="Roteador">Roteador</option>
+                        <option value="Servidor">Servidor</option>
+                        <option value="Scanner">Scanner</option>
+                        <option value="Switch">Switch</option>
+                        <option value="Teclado">Teclado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descricaoModelo">Descrição:</label>
+                    <textarea class="form-control" name="descricao" id="descricaoModelo" cols="30" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="obsModelo">Observação:</label>
+                    <textarea class="form-control" name="obs" id="obsModelo" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="CadastraModelo()">Savar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
